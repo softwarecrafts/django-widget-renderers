@@ -7,7 +7,7 @@ secrets, or on anyone's laptop. Nothing to rotate, nothing to leak.
 ## One-time PyPI setup
 
 The project doesn't exist on PyPI yet, so register a **pending publisher** — this
-reserves the name *and* authorises the workflow in one step. You must do this
+reserves the name *and* authorises the workflow in one step. It must be done
 before the first release; the workflow cannot bootstrap itself.
 
 Go to <https://pypi.org/manage/account/publishing/> and add a new pending
@@ -24,10 +24,9 @@ publisher with **exactly** these values:
 The environment name matters: `release.yml` declares `environment: pypi`, and
 PyPI will reject the publish if they don't match.
 
-Optionally, in the GitHub repo settings, create an environment named `pypi` and
-add yourself as a required reviewer. Publishing then pauses for an explicit
-approval click — a useful brake, given a version number can never be reused on
-PyPI.
+Optionally, in the GitHub repo settings, create an environment named `pypi` with a
+required reviewer. Publishing then pauses for an explicit approval click — a
+useful brake, given a version number can never be reused on PyPI.
 
 ## Cutting a release
 
@@ -39,7 +38,7 @@ PyPI.
 `pyproject.toml`, checks metadata with `twine`, and publishes.
 
 The tag/version check exists because the two drift easily, and a mismatch on PyPI
-is unfixable — you cannot re-upload a version, only yank it and burn a number.
+is unfixable — a version cannot be re-uploaded, only yanked, burning a number.
 
 ## Verifying a release
 

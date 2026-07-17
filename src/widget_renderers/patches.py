@@ -5,9 +5,9 @@ The proposal, as a monkeypatch.
 ``Widget._render``, so a widget's template comes from the active renderer instead
 of the widget class.
 
-Everything here exists only because we cannot edit Django from out-of-tree.
-In-tree, the change would be exactly this -- a method, plus one line in
-``_render``. See PROPOSAL.md.
+Everything here exists only because a third-party package cannot edit Django from
+out-of-tree. In-tree, the change would be exactly this -- a method, plus one line
+in ``_render``. See PROPOSAL.md.
 """
 
 import re

@@ -1,8 +1,7 @@
 """
 Known limitations, pinned as tests.
 
-These are real gaps, documented on purpose. Better to state them plainly than to
-have them discovered during review.
+These are real gaps, documented on purpose.
 """
 
 import pytest

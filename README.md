@@ -206,8 +206,8 @@ subwidget templates it wants.
 help code that never passes a renderer — and Django itself has such code:
 `ModelAdmin.action_checkbox` renders `CheckboxInput(attrs={"class": "action-select"})`
 with no renderer, so it picks up your project default inside the admin. If your
-template drops the caller's `class`, the changelist's "select all" breaks. (Ask
-how we know.)
+template drops the caller's `class`, the changelist's "select all" breaks. This
+is not hypothetical.
 
 ## Status
 
@@ -220,5 +220,4 @@ method and one line), what's only scaffolding, and the alternatives considered.
 
 ## Licence
 
-BSD-3-Clause — same as Django, so the code can be donated upstream without
-friction.
+BSD-3-Clause.
