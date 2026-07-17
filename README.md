@@ -79,8 +79,11 @@ pip install django-widget-renderers
 ```python
 INSTALLED_APPS = [
     ...,
+    "django.forms",         # see below — easy to miss
     "widget_renderers",     # its AppConfig.ready() calls install()
 ]
+
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 ```
 
 Or call it yourself, if you want to control ordering:
@@ -95,8 +98,30 @@ class MyAppConfig(AppConfig):
 The patch must be installed at startup — forms are *instantiated* before they're
 *rendered*, so an import-time side effect elsewhere is too late.
 
-Requires Django 4.2+ and Python 3.10+. Use `TemplatesSetting` (or any renderer
-that resolves through your template dirs) as your renderer base.
+Requires Django 4.2+ and Python 3.10+.
+
+### You need `TemplatesSetting`, and therefore `django.forms`
+
+Your renderer must resolve templates through your **project's** template engine,
+which means basing it on `TemplatesSetting`. Django's default renderer
+(`DjangoTemplates`) deliberately uses its own isolated engine that can't see your
+template dirs, so a `select_template_name` pointing at `"forms/drawer.html"` would
+never be found.
+
+The catch: once you switch to `TemplatesSetting`, Django's *own* widget templates
+have to be findable through your engine too — and they live inside the
+`django.forms` app. If it isn't in `INSTALLED_APPS` (with `APP_DIRS: True`), every
+widget you *haven't* styled blows up:
+
+```
+TemplateDoesNotExist: django/forms/widgets/textarea.html
+```
+
+So: add `django.forms` to `INSTALLED_APPS`, and keep `APP_DIRS: True` (or add
+Django's form template directory to `DIRS` explicitly). This isn't specific to
+this package — it's the standing requirement for `TemplatesSetting` — but you'll
+almost certainly meet it here first. See
+[Django's docs on `TemplatesSetting`](https://docs.djangoproject.com/en/stable/ref/forms/renderers/#templatessetting).
 
 ## Declaring a renderer
 
