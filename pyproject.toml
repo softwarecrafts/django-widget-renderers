@@ -30,7 +30,8 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/nanorepublica/django-widget-renderers"
+Homepage = "https://github.com/softwarecrafts/django-widget-renderers"
+Issues = "https://github.com/softwarecrafts/django-widget-renderers/issues"
 Proposal = "https://github.com/django/new-features/issues/172"
 
 [tool.hatch.build.targets.wheel]
