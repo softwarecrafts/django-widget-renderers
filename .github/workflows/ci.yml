@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: py${{ matrix.python }} / Django ${{ matrix.django }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Django's own supported Python versions per release.
+        include:
+          - { python: "3.10", django: "4.2" }
+          - { python: "3.11", django: "4.2" }
+          - { python: "3.12", django: "4.2" }
+          - { python: "3.10", django: "5.2" }
+          - { python: "3.11", django: "5.2" }
+          - { python: "3.12", django: "5.2" }
+          - { python: "3.13", django: "5.2" }
+          - { python: "3.12", django: "6.0" }
+          - { python: "3.13", django: "6.0" }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Install
+        run: |
+          uv venv --python ${{ matrix.python }}
+          uv pip install -e . pytest pytest-django "Django~=${{ matrix.django }}.0"
+      - name: Show versions
+        run: uv run python -c "import django; print(django.get_version())"
+      - name: Test
+        run: uv run pytest -q
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uvx ruff check .
+      - run: uvx ruff format --check .

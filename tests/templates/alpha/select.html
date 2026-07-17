@@ -1,0 +1,1 @@
+<select name="{{ widget.name }}" class="alpha-select"{% if widget.attrs.multiple %} multiple{% endif %}>{% for group, options, index in widget.optgroups %}{% for option in options %}<option value="{{ option.value|stringformat:'s' }}">{{ option.label }}</option>{% endfor %}{% endfor %}</select>
