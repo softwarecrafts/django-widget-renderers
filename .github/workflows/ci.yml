@@ -42,3 +42,21 @@ jobs:
       - uses: astral-sh/setup-uv@v5
       - run: uvx ruff check .
       - run: uvx ruff format --check .
+
+  build:
+    name: build + smoke-test the wheel
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Build
+        run: uvx --from build pyproject-build --installer uv .
+      - name: Check metadata
+        run: uvx twine check dist/*
+      - name: Install the wheel into a clean env and use it
+        # Editable installs hide packaging bugs; exercise the real artifact.
+        run: |
+          uv venv /tmp/smoke
+          VIRTUAL_ENV=/tmp/smoke uv pip install dist/*.whl
+          /tmp/smoke/bin/python -c "import widget_renderers; print(widget_renderers.__all__)"
+          /tmp/smoke/bin/python demo/demo.py
